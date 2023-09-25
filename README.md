@@ -20,4 +20,4 @@
 - Вальков В.М. (https://github.com/molnix)
 - Бородаева А._ (https://github.com/iasnydla2001)
 - Горченко Е._ (https://github.com/LISA13246)
-- Мясоедов З._ ()
+- Мясоедов З._ (https://github.com/force33)
