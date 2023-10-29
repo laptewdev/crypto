@@ -23,5 +23,8 @@
 
 <h3>Установка проекта</h3>
 
+<p>Файл .env.example -> переименовать в .env и настроить под данные своей серверной машины</p>
+<p>Далее ввести в консоли:</p>
+
 <a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&pause=1000&color=005F0F&background=000000&vCenter=true&multiline=true&repeat=false&random=false&width=435&height=90&lines=composer+install;npm+install;php+artisan+key%3Agenerate" alt="Typing SVG" /></a>
 
