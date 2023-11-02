@@ -1,0 +1,11 @@
+* {
+    box-sizing: border-box;
+}
+
+.main{
+    min-height: calc(100% - 100px);
+}
+
+.crypto-table__cell{
+    height: 100px;
+}
