@@ -6,3 +6,17 @@
 
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
+
+* {
+    box-sizing: border-box;
+}
+.navbar{
+    
+}
+.main{
+    min-height: calc(100vh - 89px);
+}
+
+.footer{
+    padding-top: 10px;
+}

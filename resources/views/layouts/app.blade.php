@@ -18,9 +18,9 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 
-<body>
+<body data-bs-theme="dark">
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-dark bg-black shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
@@ -76,10 +76,14 @@
         <main class="py-4 main">
             @yield('content')
         </main>
-        <footer class="footer">
+        <footer class="footer border-top">
             <div class="container">
                 <div class="row">
-                    footer
+                    <div class="card-footer text-center">
+                        <div class="card-body">
+                            <h5 class="card-title">Develop in 2023</h5>
+                        </div>
+                    </div>
                 </div>
             </div>
         </footer>

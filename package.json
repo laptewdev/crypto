@@ -15,8 +15,11 @@
     },
     "dependencies": {
         "@vitejs/plugin-vue": "^4.4.0",
+        "chart.js": "^4.4.0",
         "vue": "^3.2.36",
+        "vue-chartjs": "^5.2.0",
         "vue-loader": "^17.3.0",
-        "vue-router": "^4.2.5"
+        "vue-router": "^4.2.5",
+        "vue3-charts": "^1.1.33"
     }
 }
