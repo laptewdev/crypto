@@ -8,19 +8,26 @@
                 </div>
             </div>
         </div>
+        <div class="row wow fadeIn">
+            <BarChart/>
+        </div>
     </div>
 </template>
 <script setup>
 import axios from "axios"
 import {ref, onMounted} from 'vue'
+import BarChart from './BarChart.vue'
 
 const data = ref([])
+
 const getData = () => {
     axios.get('api/cryptorank')
     .then(res => data.value = res.data)
-    .catch(error => console.log(error))
+    .catch(error => console.log(error));
 }
-onMounted(() => getData())
+
+onMounted(() => {getData()})
+
 
 
 </script>
