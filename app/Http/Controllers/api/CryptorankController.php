@@ -53,7 +53,7 @@ class CryptorankController extends Controller
             "labels" => $data['name'],
             "datasets" => [
                 [
-                    "label" => "Data One",
+                    "label" => "Data One Blade",
                     "backgroundColor" => "#f87979",
                     "data" => $data['price'],
                 ]
