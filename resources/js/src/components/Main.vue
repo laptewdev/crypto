@@ -8,7 +8,7 @@
                 </div>
             </div>
         </div>
-        <div class="row wow fadeIn">
+        <div class="row">
             <BarChart/>
         </div>
     </div>

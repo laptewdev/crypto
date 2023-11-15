@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <Bar v-if="loaded" :data="chartData" />
+  <div class="container" style="min-height: 250px; height: 40vh;">
+    <Bar v-if="loaded" :data="chartData" :options="options"/>
   </div>
 </template>
 
@@ -25,7 +25,14 @@ export default {
             data: [40, 20, 12]
           }
         ]
+      },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      legend: {
+        position: 'top',
       }
+    }
   }),
   mounted () {
     this.loaded = false
