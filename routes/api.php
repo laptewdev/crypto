@@ -24,3 +24,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // ]);
 Route::get('cryptorank', [CryptorankController::class, 'index']);
 Route::get('cryptorank_bar_data', [CryptorankController::class, 'bar_data']);
+Route::get('cryptorank_home_data', [CryptorankController::class, 'home_data']);

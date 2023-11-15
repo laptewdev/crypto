@@ -73,4 +73,30 @@ class CryptorankController extends Controller
 
         return $chartData;
     }
+
+    public function home_data(Request $request)
+    {
+
+        $client = new CryptorankClient();
+        $query_keys = [
+            'limit' => $request->query('limit', 100),
+            'sort' => $request->query('sort', '-price'),
+            'api_key' => '128b2bc56a9f211b422009b0d88dfa4de2cb0ea276c1490dec3560defd74',
+        ];
+
+        if ($request->query('name') != null) $query_keys['symbols'] = $request->query('name');
+
+        $responce = $client->client->request('GET', '', ['query' => $query_keys]);
+        $responce = json_decode($responce->getBody()->getContents());
+
+        $data = [];
+        foreach ($responce->data as $mass) {
+            array_push($data, [
+                'name' => $mass->name,
+                'price' => round($mass->values->USD->price, 2),
+            ]);
+        }
+
+        return $data;
+    }
 }
