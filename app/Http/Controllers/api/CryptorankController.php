@@ -53,7 +53,7 @@ class CryptorankController extends Controller
             "labels" => $data['name'],
             "datasets" => [
                 [
-                    "label" => "Data One Blade",
+                    "label" => "Top 6 price",
                     "backgroundColor" => "#f87979",
                     "data" => $data['price'],
                 ]
@@ -92,8 +92,10 @@ class CryptorankController extends Controller
         $data = [];
         foreach ($responce->data as $mass) {
             array_push($data, [
+                'id' => $mass->id,
                 'name' => $mass->name,
                 'price' => round($mass->values->USD->price, 2),
+                'req_data' => $mass
             ]);
         }
 
