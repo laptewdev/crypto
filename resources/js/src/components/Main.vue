@@ -21,7 +21,7 @@ import BarChart from './BarChart.vue'
 const data = ref([])
 
 const getData = () => {
-    axios.get('api/cryptorank')
+    axios.get('api/main_page_data')
     .then(res => data.value = res.data)
     .catch(error => console.log(error));
 }

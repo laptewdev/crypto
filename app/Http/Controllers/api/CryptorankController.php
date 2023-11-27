@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Components\BinanceClient;
 use App\Components\CryptorankClient;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;

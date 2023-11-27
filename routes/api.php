@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\CryptorankController;
+use App\Http\Controllers\api\BinanceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Route::resources([
 //     'cryptorank' => [CryptorankController::class, 'index'],
 // ]);
-Route::get('cryptorank', [CryptorankController::class, 'index']);
-Route::get('cryptorank_bar_data', [CryptorankController::class, 'bar_data']);
-Route::get('cryptorank_home_data', [CryptorankController::class, 'home_data']);
+
+Route::get('home_data', [BinanceController::class, 'home_data']);
+Route::get('home_chart_data', [BinanceController::class, 'home_chart_data']);
+Route::get('main_page_data', [BinanceController::class, 'index']);
+Route::get('main_page_bar_data', [BinanceController::class, 'main_page_bar_data']);

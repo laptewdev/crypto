@@ -38,7 +38,7 @@ export default {
     this.loaded = false
     try {
       this.loaded = true
-      axios.get('api/cryptorank_bar_data')
+      axios.get('api/main_page_bar_data')
       .then(res => this.chartData = res.data)
       .catch(error => console.log(error));
     } catch (e) {

@@ -5,15 +5,13 @@
                 <div class="row">
                     <SearchForm
                         v-model:name="name"
-                        v-model:limit="limit"
-                        v-model:sort="sort"
                     />
                 </div>
             
                 <div class="row crypto-list">
                     <ul class="list-group">
                         <li class="list-group-item" v-for="item in data">
-                            <div class="list-group-item-button" @click="afterCryptoId=cryptoId;cryptoId=$event.target.id; crytpoIdActive(cryptoId, afterCryptoId)" :id="item['id']"></div>
+                            <div class="list-group-item-button" @click="afterCryptoId=cryptoId;cryptoId=$event.target.id; crytpoIdActive(cryptoId, afterCryptoId);" :id="item['name']"></div>
                             <div class="list-group-item-text">
                                 <h5 class="card-title">{{ item['name'] }}</h5>
                                 <p class="card-text">{{ item['price'] }}$</p>
@@ -27,6 +25,9 @@
 
         <div class="col">
             {{ cryptoId }}
+            <HomeChart
+                :chartData="chartData"
+            />
         </div>
     </div>
     
@@ -34,19 +35,39 @@
 <script setup>
 import axios from "axios"
 import {ref, watchEffect, computed} from 'vue'
+
 import SearchForm from './SearchForm.vue'
+import HomeChart from './HomeChart.vue'
 
-const cryptoId = ref()
-const afterCryptoId = ref()
+const cryptoId = ref("BTCUSDT")
+const afterCryptoId = ref("BTCUSDT")
 
-const limit = ref(100)
 const name = ref("")
-const sort = ref("-price")
 
+const chartData = ref(
+    {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            datasets: [
+                {
+                    label: '',
+                    backgroundColor: '#ffffff',
+                    borderColor: '#ffffff',
+                    pointBackgroundColor: '#7cfaa2',
+                    borderWidth: 1,
+                    pointBorderColor: '#7cfaa27a',
+                    //Data to be represented on y-axis
+                    data: [40, 20, 30, 50, 90, 10, 20, 40, 50, 70, 90, 100]
+                }
+            ]
+        }
+)
 const data = ref([])
 
 const apiUrl = computed(()=>{
-    return `api/cryptorank_home_data?name=${name.value}&limit=${limit.value}&sort=${sort.value}`
+    return `api/home_data?name=${name.value}`
+})
+const apiChartUrl = computed(()=>{
+    return `api/home_chart_data?symbol=${cryptoId.value}`
 })
 
 const getData = () => {
@@ -55,7 +76,13 @@ const getData = () => {
     .catch(error => console.log(error));
 }
 
-watchEffect(() => {getData()})
+const getChartData = () => {
+    axios.get(apiChartUrl.value)
+    .then(res => chartData.value = res.data)
+    .catch(error => console.log(error));
+}
+
+watchEffect(() => {getData(); getChartData()})
 
 const crytpoIdActive = (id, afterId) =>{
     if (afterId != null){
