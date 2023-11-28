@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Components\BinanceClient;
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\Request;
 
 class BinanceController extends Controller
@@ -116,6 +117,7 @@ class BinanceController extends Controller
             'time' => [],
             'price' => [],
         ];
+        $chartData = [];
         $client = new BinanceClient();
         $query_keys = [
             'interval' => '1m',
@@ -123,29 +125,51 @@ class BinanceController extends Controller
 
         if ($request->query('symbol') != null) $query_keys['symbol'] = $request->query('symbol');
 
-        $responce = $client->client->request('GET', 'v3/klines', ['query' => $query_keys]);
-        $responce = json_decode($responce->getBody()->getContents());
 
-        foreach ($responce as $item) {
-            $date = date("d/m/Y H:i:s", $item[0] / 1000);
-            array_push($data['time'], (string)$date);
-            array_push($data['price'], round($item[1], 2));
+        try {
+            $responce = $client->client->request('GET', 'v3/klines', ['query' => $query_keys]);
+            $responce = json_decode($responce->getBody()->getContents());
+
+            foreach ($responce as $item) {
+                $date = date("d/m/Y H:i:s", $item[0] / 1000);
+                array_push($data['time'], (string)$date);
+                array_push($data['price'], round($item[1], 2));
+            }
+
+            $chartData = [
+
+                "labels" => $data['time'],
+                "datasets" => [
+                    [
+                        "label" => $request->query('symbol'),
+                        "tencion" => 0.1,
+                        "borderColor" => "#ffffff",
+                        "pointHoverBackgroundColor" => '#7cfaa2',
+                        "borderWidth" => 1,
+                        "pointHoverBorderColor" => '#7cfaa27a',
+                        "pointStyle" => 'circle',
+                        "data" => $data['price'],
+                    ]
+                ]
+            ];
+        } catch (Exception $e) {
+            $chartData = [
+                "labels" => "",
+                "datasets" => [
+                    [
+                        "label" => $request->query('symbol') . " search...",
+                        "tencion" => 0.1,
+                        "borderColor" => "#ffffff",
+                        "pointHoverBackgroundColor" => '#7cfaa2',
+                        "borderWidth" => 1,
+                        "pointHoverBorderColor" => '#7cfaa27a',
+                        "pointStyle" => 'circle',
+                        "data" => "",
+                    ]
+                ]
+            ];
         }
 
-        $chartData = [
-            "labels" => $data['time'],
-            "datasets" => [
-                [
-                    "label" => $request->query('symbol'),
-                    "backgroundColor" => "#ffffff",
-                    "borderColor" => "#ffffff",
-                    "pointBackgroundColor" => '#7cfaa2',
-                    "borderWidth" => 1,
-                    "pointBorderColor" => '#7cfaa27a',
-                    "data" => $data['price'],
-                ]
-            ]
-        ];
 
         return $chartData;
 

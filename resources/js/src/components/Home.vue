@@ -5,6 +5,7 @@
                 <div class="row">
                     <SearchForm
                         v-model:name="name"
+                        @update:name="afterCryptoId=cryptoId;cryptoId=name; crytpoIdActive(cryptoId, afterCryptoId);"
                     />
                 </div>
             
@@ -49,7 +50,7 @@ const chartData = ref(
             labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
             datasets: [
                 {
-                    label: '',
+                    label: 'Data loading...',
                     backgroundColor: '#ffffff',
                     borderColor: '#ffffff',
                     pointBackgroundColor: '#7cfaa2',
@@ -64,7 +65,7 @@ const chartData = ref(
 const data = ref([])
 
 const apiUrl = computed(()=>{
-    return `api/home_data?name=${name.value}`
+    return `api/home_data?name=${name.value}`;
 })
 const apiChartUrl = computed(()=>{
     return `api/home_chart_data?symbol=${cryptoId.value}`
@@ -85,10 +86,13 @@ const getChartData = () => {
 watchEffect(() => {getData(); getChartData()})
 
 const crytpoIdActive = (id, afterId) =>{
-    if (afterId != null){
+    if (afterId != null && document.getElementById(afterId)){
         document.getElementById(afterId).parentNode.classList.remove('active')
     }
-    document.getElementById(id).parentNode.classList.add('active')
+    if(document.getElementById(id)){
+        document.getElementById(id).parentNode.classList.add('active')
+    }
+    
 }
 
 </script>
