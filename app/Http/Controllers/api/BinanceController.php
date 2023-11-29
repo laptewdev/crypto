@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Components\BinanceClient;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -120,7 +121,9 @@ class BinanceController extends Controller
         $chartData = [];
         $client = new BinanceClient();
         $query_keys = [
-            'interval' => '1m',
+            'interval' => $request->query('interval'),
+            'startTime' => Carbon::parse($request->query('start_time'))->getPreciseTimestamp(3),
+            'endTime' => Carbon::parse($request->query('end_time'))->getPreciseTimestamp(3),
         ];
 
         if ($request->query('symbol') != null) $query_keys['symbol'] = $request->query('symbol');
@@ -137,56 +140,106 @@ class BinanceController extends Controller
             }
 
             $chartData = [
-
-                "labels" => $data['time'],
-                "datasets" => [
-                    [
-                        "label" => $request->query('symbol'),
-                        "tencion" => 0.1,
-                        "borderColor" => "#ffffff",
-                        "pointHoverBackgroundColor" => '#7cfaa2',
-                        "borderWidth" => 1,
-                        "pointHoverBorderColor" => '#7cfaa27a',
-                        "pointStyle" => 'circle',
-                        "data" => $data['price'],
-                    ]
-                ]
+                "data" => [
+                    "labels" => $data['time'],
+                    "datasets" => [
+                        [
+                            "label" => $request->query('symbol'),
+                            "tencion" => 0.1,
+                            "borderColor" => "#ffffff",
+                            "pointHoverBackgroundColor" => '#7cfaa2',
+                            "borderWidth" => 1,
+                            "pointHoverBorderColor" => '#7cfaa27a',
+                            "pointStyle" => 'circle',
+                            "data" => $data['price'],
+                        ]
+                    ],
+                ],
+                "options" => [
+                    "responsive" => true,
+                    "maintainAspectRatio" => false,
+                    "legend" => [
+                        "position" => 'top',
+                    ],
+                    "scales" => [
+                        "y" => [
+                            "min" => "original",
+                            "max" => "original",
+                        ],
+                    ],
+                    "plugins" => [
+                        "zoom" => [
+                            "limits" => [
+                                "y" => ["min" => "original", "max" => "original"],
+                            ],
+                            "pan" => [
+                                "enabled" => true
+                            ],
+                            "zoom" => [
+                                "wheel" => [
+                                    "enabled" => true,
+                                ],
+                                "pinch" => [
+                                    "enabled" => true
+                                ],
+                                "drag" => [
+                                    "enabled" => false
+                                ],
+                                "mode" => 'xy',
+                            ],
+                        ]
+                    ],
+                ],
             ];
         } catch (Exception $e) {
             $chartData = [
-                "labels" => "",
-                "datasets" => [
-                    [
-                        "label" => $request->query('symbol') . " search...",
-                        "tencion" => 0.1,
-                        "borderColor" => "#ffffff",
-                        "pointHoverBackgroundColor" => '#7cfaa2',
-                        "borderWidth" => 1,
-                        "pointHoverBorderColor" => '#7cfaa27a',
-                        "pointStyle" => 'circle',
-                        "data" => "",
+                "data" => [
+                    "labels" => "",
+                    "datasets" => [
+                        [
+                            "label" => $request->query('symbol') . " search...",
+                            "tencion" => 0.1,
+                            "borderColor" => "#ffffff",
+                            "pointHoverBackgroundColor" => '#7cfaa2',
+                            "borderWidth" => 1,
+                            "pointHoverBorderColor" => '#7cfaa27a',
+                            "pointStyle" => 'circle',
+                            "data" => "",
+                        ]
                     ]
-                ]
+                ],
+                "options" => [
+                    "responsive" => true,
+                    "maintainAspectRatio" => false,
+                    "legend" => [
+                        "position" => 'top',
+                    ],
+                    "plugins" => [
+                        "zoom" => [
+                            "limits" => [
+                                "y" => ["min" => 'original', "max" => 'original'],
+                            ],
+                            "pan" => [
+                                "enabled" => true
+                            ],
+                            "zoom" => [
+                                "wheel" => [
+                                    "enabled" => true,
+                                ],
+                                "pinch" => [
+                                    "enabled" => true
+                                ],
+                                "drag" => [
+                                    "enabled" => false
+                                ],
+                                "mode" => 'xy',
+                            ],
+                        ]
+                    ],
+                ],
             ];
         }
 
-
         return $chartData;
-
-        // {
-        //     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-        //     datasets: [
-        //         {
-        //             label: '',
-        //             backgroundColor: '#ffffff',
-        //             borderColor: '#ffffff',
-        //             pointBackgroundColor: '#7cfaa2',
-        //             borderWidth: 1,
-        //             pointBorderColor: '#7cfaa27a',
-        //             //Data to be represented on y-axis
-        //             data: [40, 20, 30, 50, 90, 10, 20, 40, 50, 70, 90, 100]
-        //         }
-        //     ]
-        // }
     }
 }

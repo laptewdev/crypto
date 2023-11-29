@@ -15,7 +15,7 @@
                             <div class="list-group-item-button" @click="afterCryptoId=cryptoId;cryptoId=$event.target.id; crytpoIdActive(cryptoId, afterCryptoId);" :id="item['name']"></div>
                             <div class="list-group-item-text">
                                 <h5 class="card-title">{{ item['name'] }}</h5>
-                                <p class="card-text">{{ item['price'] }}$</p>
+                                <p class="card-text">{{ item['price'] }}</p>
                             </div>
                         </li>
                     </ul>
@@ -25,10 +25,20 @@
         </div>
 
         <div class="col">
-            {{ cryptoId }}
-            <HomeChart
-                :chartData="chartData"
-            />
+            <div class="row">
+                {{ cryptoId }}
+                <HomeChart
+                    :chartData="chartData['data']"
+                    :options="chartData['options']"
+                />
+            </div>
+            <div class="row">
+                <HomeChartSearch
+                    v-model:interval="interval"
+                    v-model:startTime="startTime"
+                    v-model:endTime="endTime"
+                />
+            </div>
         </div>
     </div>
     
@@ -38,6 +48,7 @@ import axios from "axios"
 import {ref, watchEffect, computed} from 'vue'
 
 import SearchForm from './SearchForm.vue'
+import HomeChartSearch from "./HomeChartSearch.vue"
 import HomeChart from './HomeChart.vue'
 
 const cryptoId = ref("BTCUSDT")
@@ -45,8 +56,10 @@ const afterCryptoId = ref("BTCUSDT")
 
 const name = ref("")
 
+const data = ref([])
 const chartData = ref(
     {
+        data:{
             labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
             datasets: [
                 {
@@ -60,15 +73,57 @@ const chartData = ref(
                     data: [40, 20, 30, 50, 90, 10, 20, 40, 50, 70, 90, 100]
                 }
             ]
+        },
+        options:{
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: {
+                position: 'top',
+            },
+            plugins:{
+                zoom:{
+                    limits: {
+                        y: {min: 'original', max: 'original'},
+                    },
+                    pan:{
+                        enabled: true
+                    },
+                    zoom:{
+                        wheel: {
+                            enabled: true,
+                        },
+                        pinch: {
+                            enabled: true
+                        },
+                        drag:{
+                            enabled: false
+                        },
+                        mode: 'xy',
+                    },
+                }
+            },
         }
+    }
 )
-const data = ref([])
+
+const currentDateTime = (skipMonths) => {
+      const current = new Date();
+      const date = current.getFullYear()+'-'+(current.getMonth()+1-skipMonths)+'-'+current.getDate();
+      const time = current.getHours() + ":" + current.getMinutes() + ":" + current.getSeconds();
+      const dateTime = date +' '+ time;
+
+      return dateTime;
+}
+
+const interval = ref("5m")
+const startTime = ref(currentDateTime(1))
+const endTime = ref(currentDateTime(0))
 
 const apiUrl = computed(()=>{
     return `api/home_data?name=${name.value}`;
 })
 const apiChartUrl = computed(()=>{
-    return `api/home_chart_data?symbol=${cryptoId.value}`
+    return `api/home_chart_data?symbol=${cryptoId.value}&interval=${interval.value}&start_time=${startTime.value}&end_time=${endTime.value}`
 })
 
 const getData = () => {
@@ -92,7 +147,6 @@ const crytpoIdActive = (id, afterId) =>{
     if(document.getElementById(id)){
         document.getElementById(id).parentNode.classList.add('active')
     }
-    
 }
 
 </script>

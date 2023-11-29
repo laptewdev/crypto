@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <home-page></home-page>
 
-        <div class="col-md-8">
+        <!-- <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Dashboard') }}</div>
 
@@ -21,7 +21,7 @@
             </div>
 
 
-        </div>
+        </div> -->
     </div>
 </div>
 @endsection

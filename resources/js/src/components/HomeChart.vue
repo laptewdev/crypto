@@ -13,36 +13,9 @@ ChartJS.register(Title, Tooltip, Legend, PointElement, CategoryScale, LinearScal
 
 defineProps({
     chartData: Object,
+    options: Object,
 })
 
-const options = ref({
-    responsive: true,
-    maintainAspectRatio: false,
-    legend: {
-        position: 'top',
-    },
-    plugins:{
-        zoom:{
-            limits: {
-                y: {min: 'original', max: 'original'},
-            },
-            pan:{
-                enabled: true
-            },
-            zoom:{
-                wheel: {
-                    enabled: true,
-                },
-                pinch: {
-                    enabled: true
-                },
-                drag:{
-                    enabled: false
-                },
-                mode: 'xy',
-            },
-        }
-    },
-})
+
 
 </script>
